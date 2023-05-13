@@ -54,6 +54,7 @@ function start() {
 	setInterval(() => {
 		sendJson(info());
 	}, 1000000);
+	
 }
 	
 function sendJson(x) {

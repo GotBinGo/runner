@@ -7,7 +7,7 @@ var lastN = 0
 setInterval(() => {
 	console.log(n, n-lastN);
 	lastN = n;
-}, 200);
+}, 1000);
 
 wss.on('connection', function connection(ws) {
 	var intervals = [];
@@ -43,8 +43,8 @@ wss.on('connection', function connection(ws) {
 	// 	setTimeout(tt, 1);
 	// }
 
-	for(var i = 0; i < 30000; i ++)
-		setTimeout(tt, 1);
+	// for(var i = 0; i < 30000; i ++)
+	// 	setTimeout(tt, 1);
 
 		// intervals.push(setInterval(() => {
 		// 	// n++;

@@ -1,0 +1,19 @@
+
+list nodes
+    list node code version
+    list node ip
+
+
+master and worker nodes
+
+register master in all workers
+
+ability to run task on remote worker
+
+data/file collection to master
+
+master determine ranges
+
+scan ranges with master
+
+stripe ranges

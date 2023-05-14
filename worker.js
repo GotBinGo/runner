@@ -1,7 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import WS from 'ws';
 
-const masterUrl = 'ws://localhost:8080';
+const masterUrl = 'ws://20.13.166.18:8080';
 const workerId = 0;
 const ip = '';
 

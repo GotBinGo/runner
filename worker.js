@@ -4,12 +4,36 @@ import WS from 'ws';
 const masterUrl = 'ws://localhost:8080';
 const workerId = 0;
 const ip = '';
+
+let stopped = false;
+let n = 0;
+var lastN = 0
+
+setInterval(() => {
+	console.log(n, n-lastN);
+	lastN = n;
+}, 1000);
  
 const options = {
     WebSocket: WS,
     connectionTimeout: 1000,
     maxRetries: 10,
 };
+
+
+import * as readline from 'readline';
+
+readline.emitKeypressEvents(process.stdin);
+
+if (process.stdin.isTTY)
+    process.stdin.setRawMode(true);
+
+process.stdin.on('keypress', (chunk, key) => {
+	if (key && key.name == 's')
+		stopped = !stopped;
+	if (key && key.name == 'q')
+		process.exit();
+  });
 
 const ws = new ReconnectingWebSocket(masterUrl, [], options);
 
@@ -32,6 +56,9 @@ ws.addEventListener('message', function message(rawData) {
 });
 
 async function processTask(data) {
+	if(stopped) {
+		return;
+	}
 	var res = tasks[data.function](...data.params);
 	sendJson(result(data.function, data.uuid, data.params, await res));
 }
@@ -39,7 +66,7 @@ async function processTask(data) {
 const tasks = {
 	'alma': async (x) => {
 		// console.log('ALMA with param', x, y);
-		
+		n++;
 		// var resp = (await fetch('http://s13.webtar.hu')).text();
 		return 2*x;
 	},

@@ -1,6 +1,6 @@
 import cluster from 'node:cluster'
-import ws from 'lark-websocket'
 import * as crypto from 'crypto';
+
 
 let n = 0;
 var lastN = 0

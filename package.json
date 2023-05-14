@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "lark-websocket": "^0.0.5",
+    "npm": "^9.6.6",
     "reconnecting-websocket": "^4.4.0",
     "ws": "^8.13.0"
   },

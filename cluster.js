@@ -6,7 +6,12 @@ let n = 0;
 var lastN = 0
 const nthreads = 20;
 
+import { setFlagsFromString } from 'v8';
+import { runInNewContext } from 'vm';
 
+setFlagsFromString('--expose_gc');
+const gc = runInNewContext('gc'); // nocommit
+global.gc = gc;
 
 import { createServer } from 'http';
 import { parse } from 'url';
@@ -74,6 +79,7 @@ import { WebSocketServer } from 'ws';
 
 if(cluster.isPrimary) {
     setInterval(() => {
+        global.gc();
         n = ns.reduce((partialSum, a) => partialSum + a, 0)
         console.log(ns)
         console.log(n, n-lastN);
@@ -120,6 +126,7 @@ if(cluster.isPrimary) {
 } else {
     setInterval(() => {
        process.send(n);
+       global.gc();
     }, 1000);
 
     const wss = new WebSocketServer({ noServer: true });
@@ -167,17 +174,17 @@ if(cluster.isPrimary) {
         function task(fn, params) {
             return {
                 type: 'task',
-                uuid: crypto.randomUUID(),
                 function: fn,
                 params: params
             }
         }
       
           function tt() {
-              sendTask(ws, 'alma', [Math.random()]);
-              setTimeout(tt, 1);
+              for(var i = 0; i < 100; i ++)
+                sendTask(ws, 'alma', [Math.random()]);
+              setTimeout(tt, 10);
           }
-          for(var i = 0; i < 3000; i ++)
+          for(var i = 0; i < 30; i ++)
               setTimeout(tt, 1);
       
           ws.on('message', (rawData) => {

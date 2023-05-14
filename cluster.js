@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 
 let n = 0;
 var lastN = 0
-const nthreads = 20;
+const nthreads = 1;
 
 import { setFlagsFromString } from 'v8';
 import { runInNewContext } from 'vm';

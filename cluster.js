@@ -17,65 +17,6 @@ import { createServer } from 'http';
 import { parse } from 'url';
 import { WebSocketServer } from 'ws';
 
-// const server = createServer();
-// const wss2 = new WebSocketServer({ noServer: true });
-
-// function sendTask(ws, fnName, params) {
-//     params = params && params.length ? params : [];
-//     sendJson(ws, task(fnName, params));
-// }
-
-// function sendJson(ws,x) {
-//     ws.send(JSON.stringify(x));
-// }
-
-// function task(fn, params) {
-//     return {
-//         type: 'task',
-//         uuid: crypto.randomUUID(),
-//         function: fn,
-//         params: params
-//     }
-// }
-
-
-
-// wss2.on('connection', function connection(ws) {
-//   ws.on('error', console.error);
-
-//     function tt() {
-//         sendTask(ws, 'alma', [Math.random()]);
-//         setTimeout(tt, 1);
-//     }
-//     for(var i = 0; i < 3000; i ++)
-// 		setTimeout(tt, 1);
-
-//     ws.on('message', (rawData) => {
-//         const data = JSON.parse(rawData);
-
-//         if(data.type == 'result') {
-//             processResult(data);
-//         }
-
-//         function processResult(data) {
-//             // console.log(data.function, data.params, data.result)
-//             if(data.params[0] * 2 == data.result) {
-//                 n++;
-//             }
-//         } 
-//     });
-// });
-
-// server.on('upgrade', function upgrade(request, socket, head) {
-//   const { pathname } = parse(request.url);
-
-//     wss2.handleUpgrade(request, socket, head, function done(ws) {
-//       wss2.emit('connection', ws, request);
-//     });
-// });
-
-
-// server.listen(8080);
 
 if(cluster.isPrimary) {
     setInterval(() => {
@@ -180,11 +121,12 @@ if(cluster.isPrimary) {
         }
       
           function tt() {
-              for(var i = 0; i < 100; i ++)
-                sendTask(ws, 'alma', [Math.random()]);
-              setTimeout(tt, 10);
+              for(var i = 0; i < 1; i ++) {
+                  sendTask(ws, 'alma', [Math.random()]);
+              }
+              setTimeout(tt, 100);
           }
-          for(var i = 0; i < 30; i ++)
+          for(var i = 0; i < 1; i ++)
               setTimeout(tt, 1);
       
           ws.on('message', (rawData) => {
@@ -204,89 +146,3 @@ if(cluster.isPrimary) {
       });
 
 }
-
-
-// if(cluster.isPrimary) { // make a child process and pipe all ws connections to it
-    
-//     let workers = [];
-//     let nextWorkerIndex = 0;
-//     for(var i = 0; i < nthreads; i++) {
-//         var worker = cluster.fork();
-        
-//         worker.once("online", function() {
-//             console.log("worker online with pid", worker.process.pid);
-//         })
-//         workers.push(worker);
-//     }
-
-//     ws.createServer(function(client, request){
-//         console.log('SENDING TO WORKER')
-//         workers[nextWorkerIndex++].send("socket", client._socket); // send all websocket clients to the worker thread
-//         if(nextWorkerIndex >= workers.length) {
-//             nextWorkerIndex = 0;
-//         }
-//     }).listen(8080);
-// }
-// else {
-//     setInterval(() => {
-//         console.log(n, n-lastN);
-//         lastN = n;
-//     }, 1000);
-//     process.on("message", function(message, handler) {
-//         if(message === "socket") { // Note: Node js can only send sockets via handler if message === "socket", because passing sockets between threads is sketchy as fuck
-//             var client = ws.createClient(handler);
-
-//             client.on('message',function(rawData){
-//                 // console.log("worker " + process.pid + " got:", rawData);
-//                 // client.send("I got your: " + msg);
-//                 const data = JSON.parse(rawData);
-
-//                 if(data.type == 'result') {
-//                     processResult(data);
-//                 }
-
-//                 function processResult(data) {
-//                     // console.log(data.function, data.params, data.result)
-//                     if(data.params[0] * 2 == data.result) {
-//                         n++;
-//                     }
-//                 } 
-//             });
-
-
-
-            
-//             function tt() {
-//                 sendTask('alma', [Math.random()]);
-
-//                 setTimeout(tt, 1);
-//             }
-
-//             for(var i = 0; i < 300; i ++)
-// 		        setTimeout(tt, 1);
-
-//             function sendTask(fnName, params) {
-//                 params = params && params.length ? params : [];
-//                 sendJson(task(fnName, params));
-//             }
-        
-//             function sendJson(x) {
-//                 try {
-
-//                     client.send(JSON.stringify(x));
-//                 } catch(e) {
-//                     console.log('e')
-//                 }
-//             }
-        
-//             function task(fn, params) {
-//                 return {
-//                     type: 'task',
-//                     uuid: crypto.randomUUID(),
-//                     function: fn,
-//                     params: params
-//                 }
-//             }
-//         }
-//     });
-// }

@@ -67,8 +67,11 @@ const tasks = {
 	'alma': async (x) => {
 		// console.log('ALMA with param', x, y);
 		n++;
-		// var resp = (await fetch('http://s13.webtar.hu')).text();
 		return 2*x;
+	},
+	'ip': async (x) => {
+		var resp = (await fetch('http://s13.webtar.hu/ip.php')).text();
+		return resp;
 	},
 	'bela': () => {
 		// console.log('BELA');
